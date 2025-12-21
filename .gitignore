@@ -1,0 +1,16 @@
+# Go 项目忽略项（编译产物、依赖）
+*.exe
+*.dll
+/bin/
+/pkg/
+/vendor/
+.idea/
+.vscode/
+
+# Vue 项目忽略项（依赖、编译产物）
+node_modules/
+dist/
+build/
+.env
+.env.*
+npm-debug.log*
