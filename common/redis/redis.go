@@ -48,8 +48,11 @@ func CheckCaptchaForEmail(email, userInput string) (bool, error) {
 
 		return false, err
 	}
+	// fmt.Printf("验证码分别是: %s, %s\n", storedCaptcha, userInput)
 
 	if strings.EqualFold(storedCaptcha, userInput) {
+		//查看验证码和储存的是否一致
+		// fmt.Printf("验证码验证成功: %s, %s\n", storedCaptcha, userInput)
 
 		// 验证成功后删除 key
 		if err := Rdb.Del(ctx, key).Err(); err != nil {
@@ -57,6 +60,7 @@ func CheckCaptchaForEmail(email, userInput string) (bool, error) {
 		} else {
 
 		}
+
 		return true, nil
 	}
 

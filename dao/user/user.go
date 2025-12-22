@@ -4,6 +4,7 @@ import (
 	"context"
 	"shc-ai-demo/common/mysql"
 	"shc-ai-demo/model"
+	"shc-ai-demo/utils"
 
 	"gorm.io/gorm"
 )
@@ -25,4 +26,18 @@ func IsExistUser(username string) (bool, *model.User) {
 	}
 
 	return true, user
+}
+
+// 创建用户
+func Register(username, email, password string) (*model.User, bool) {
+	if user, err := mysql.InsertUser(&model.User{
+		Email:    email,
+		Name:     username,
+		Username: username,
+		Password: utils.MD5(password),
+	}); err != nil {
+		return nil, false
+	} else {
+		return user, true
+	}
 }

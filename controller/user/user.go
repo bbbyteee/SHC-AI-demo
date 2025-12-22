@@ -43,7 +43,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	token, code_ := user.Register(req.Email, req.Captcha, req.Password)
+	token, code_ := user.Register(req.Email, req.Password, req.Captcha)
 	if code_ != code.CodeSuccess {
 		c.JSON(http.StatusOK, res.CodeOf(code_))
 		return
