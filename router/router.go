@@ -1,6 +1,10 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"shc-ai-demo/middleware/jwt"
+
+	"github.com/gin-gonic/gin"
+)
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
@@ -11,9 +15,9 @@ func InitRouter() *gin.Engine {
 	}
 	//后续登录的接口需要jwt鉴权
 	{
-		// AIGroup := enterRouter.Group("/AI")
-		// AIGroup.Use(jwt.Auth())
-		// AIRouter(AIGroup)
+		AIGroup := enterRouter.Group("/AI")
+		AIGroup.Use(jwt.Auth())
+		AIRouter(AIGroup)
 	}
 
 	{
