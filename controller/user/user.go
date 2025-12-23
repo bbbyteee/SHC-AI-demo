@@ -10,6 +10,16 @@ import (
 )
 
 type (
+	LoginRequest struct {
+		Username string `json:"username" binding:"required"`
+		Password string `json:"password" binding:"required"`
+	}
+
+	LoginResponse struct {
+		controller.Response
+		Token string `json:"token,omitempty"`
+	}
+
 	RegisterRequest struct {
 		Email    string `json:"email" binding:"required"`
 		Captcha  string `json:"captcha"`
@@ -31,6 +41,23 @@ type (
 
 func Login(c *gin.Context) {
 
+	req := new(LoginRequest)
+	res := new(LoginResponse)
+
+	if err := c.ShouldBind(req); err != nil {
+		c.JSON(http.StatusOK, res.CodeOf(code.CodeInvalidParams))
+		return
+	}
+
+	token, code_ := user.Login(req.Username, req.Password)
+	if code_ != code.CodeSuccess {
+		c.JSON(http.StatusOK, res.CodeOf(code_))
+		return
+	}
+
+	res.Success()
+	res.Token = token
+	c.JSON(http.StatusOK, res)
 }
 
 func Register(c *gin.Context) {
