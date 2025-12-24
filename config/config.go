@@ -12,6 +12,12 @@ type MainConfig struct {
 	Host    string `toml:"host"`
 }
 
+type AI struct {
+	ApiKey    string `toml:"apikey"`
+	BaseURL   string `toml:"baseurl"`
+	ModelName string `toml:"modelname"`
+}
+
 type EmailConfig struct {
 	Authcode string `toml:"authcode"`
 	Email    string `toml:"email" `
@@ -55,6 +61,7 @@ type Config struct {
 	JwtConfig   `toml:"jwtConfig"`
 	MainConfig  `toml:"mainConfig"`
 	Rabbitmq    `toml:"rabbitmqConfig"`
+	AI          `toml:"AIConfig"`
 }
 
 type RedisKeyConfig struct {

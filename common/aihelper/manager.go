@@ -102,7 +102,7 @@ func (m *AIHelperManager) GetUserSessions(userName string) []string {
 
 // 全局管理器实例
 var globalManager *AIHelperManager
-var once sync.Once
+var once sync.Once //保证程序生命周期中只被执行一次，并且并发安全
 
 // GetGlobalManager 获取全局管理器实例
 func GetGlobalManager() *AIHelperManager {

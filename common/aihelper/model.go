@@ -32,6 +32,8 @@ func NewOpenAIModel(ctx context.Context) (*OpenAIModel, error) {
 	modelName := os.Getenv("OPENAI_MODEL_NAME")
 	baseURL := os.Getenv("OPENAI_BASE_URL")
 
+	fmt.Printf("key:%s, modelName:%s, baseURL:%s", key, modelName, baseURL)
+
 	llm, err := openai.NewChatModel(ctx, &openai.ChatModelConfig{
 		BaseURL: baseURL,
 		Model:   modelName,
@@ -70,8 +72,8 @@ func (o *OpenAIModel) StreamResponse(ctx context.Context, messages []*schema.Mes
 		}
 		if len(msg.Content) > 0 {
 			fullResp.WriteString(msg.Content) // 聚合
-			
-			cb(msg.Content)                   // 实时调用cb函数，方便主动发送给前端
+
+			cb(msg.Content) // 实时调用cb函数，方便主动发送给前端
 		}
 	}
 

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"shc-ai-demo/common/aihelper"
 	"shc-ai-demo/common/code"
+	"shc-ai-demo/config"
 	"shc-ai-demo/dao/session"
 	"shc-ai-demo/model"
 
@@ -48,7 +49,9 @@ func CreateSessionAndSendMessage(userName string, userQuestion string, modelType
 	//2：获取AIHelper并通过其管理消息
 	manager := aihelper.GetGlobalManager()
 	config := map[string]interface{}{
-		"apiKey": "your-api-key", // TODO: 从配置中获取
+		"apiKey":    config.GetConfig().AI.ApiKey, // TODO: 从配置中获取
+		"baseUrl":   config.GetConfig().AI.BaseURL,
+		"modelName": config.GetConfig().AI.ModelName,
 	}
 	helper, err := manager.GetOrCreateAIHelper(userName, createdSession.ID, modelType, config)
 	if err != nil {
