@@ -1,7 +1,7 @@
 <template>
   <div class="menu-container">
     <el-header class="header">
-      <h1>AI应用平台</h1>
+      <h1>SHC-AI应用平台</h1>
       <el-button type="danger" @click="handleLogout">退出登录</el-button>
     </el-header>
     <el-main class="main">
