@@ -4,10 +4,16 @@
 
 ## 使用方法
 
-运行项目：
+运行后端项目：
 
 ```bash
 go run main.go
 ```
 
-启动后端AI程序
+启动前端界面：
+
+```bash
+cd vue-fronted
+npm install
+npm run serve
+```
