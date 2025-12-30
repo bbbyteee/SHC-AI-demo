@@ -58,6 +58,7 @@ func main() {
 	//初始化数据库
 	shc_mysql.InitMysql()
 	log.Println("Mysql连接成功!")
+	log.Printf("[InitMysql] DB addr = %p\n", shc_mysql.DB)
 	//初始化AIHelperManager
 	readDataFromDB()
 	//初始化RabbitMQ

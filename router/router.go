@@ -21,8 +21,8 @@ func InitRouter() *gin.Engine {
 	}
 
 	{
-		// ImageGroup := enterRouter.Group("/image")
-		// ImageGroup.Use(jwt.Auth())
+		ImageGroup := enterRouter.Group("/image")
+		ImageGroup.Use(jwt.Auth())
 		// ImageRouter(ImageGroup)
 	}
 	return r

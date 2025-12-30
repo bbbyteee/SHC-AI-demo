@@ -45,6 +45,10 @@ type (
 		History []model.History `json:"history"`
 		controller.Response
 	}
+	TitleRequest struct {
+		SessionID string `json:"sessionId" binding:"required"` //会话ID
+		Title     string `json:"title" binding:"required"`     //新标题
+	}
 )
 
 func GetUserSessionsByUserName(c *gin.Context) {
@@ -178,5 +182,22 @@ func ChatHistory(c *gin.Context) {
 
 	res.Success()
 	res.History = history
+	c.JSON(http.StatusOK, res)
+}
+
+func UpdateSessionTitle(c *gin.Context) {
+	req := new(TitleRequest)
+	res := new(controller.Response)
+	if err := c.ShouldBindJSON(req); err != nil {
+		c.JSON(http.StatusOK, res.CodeOf(code.CodeInvalidParams))
+		return
+	}
+	code_ := session.UpdateSessionTitle(req.SessionID, req.Title)
+	if code_ != code.CodeSuccess {
+		c.JSON(http.StatusOK, res.CodeOf(code_))
+		return
+	}
+
+	res.Success()
 	c.JSON(http.StatusOK, res)
 }

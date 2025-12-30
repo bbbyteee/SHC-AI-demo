@@ -46,6 +46,7 @@ func (f *AIModelFactory) registerCreators() {
 		}
 		return NewOllamaModel(ctx, baseURL, modelName)
 	}
+	//后续可继续添加相应模型
 }
 
 // CreateAIModel 根据类型创建 AI 模型

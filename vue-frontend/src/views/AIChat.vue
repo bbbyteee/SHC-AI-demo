@@ -8,12 +8,29 @@
       </div>
       <ul class="session-list-ul">
         <li
-          v-for="session in sessions"
+          v-for="session in Object.values(sessions)"
           :key="session.id"
           :class="['session-item', { active: currentSessionId === session.id }]"
           @click="switchSession(session.id)"
         >
+          <!-- 显示态 -->
+          <span
+            v-if="!session.editing"
+            class="session-title"
+            @dblclick.stop="startEditSession(session)"
+          >
           {{ session.name || `会话 ${session.id}` }}
+          </span>
+          <!-- 编辑态 -->
+          <input
+            v-else
+            class="session-title-input"
+            v-model="session.name"
+            :ref="el => session._inputEl = el"
+            @keyup.enter.prevent="session._inputEl.blur()"
+            @blur="finishEditSession(session)"
+            @click.stop
+          />
         </li>
       </ul>
     </div>
@@ -128,7 +145,8 @@ export default {
             sessionMap[sid] = {
               id: sid,
               name: s.name || `会话 ${sid}`,
-              messages: [] // lazy load
+              messages: [], // lazy load
+              editing: false   // 👈 新增
             }
           })
           sessions.value = sessionMap
@@ -454,6 +472,49 @@ export default {
       }
     }
 
+    const startEditSession = (session) => {
+      session._oldName = session.name
+      session.editing = true
+
+      nextTick(() => {
+        session._inputEl?.select()
+      })
+    }
+
+    const finishEditSession = async (session) => {
+      session.editing = false
+
+      // 这里暂时什么都不做
+      // 下一步我们才会加“调用后端保存 title”
+      const newName = session.name?.trim()
+      const oldName = session._oldName
+
+      // 1️⃣ 空标题，不允许
+      if (!newName) {
+        session.name = oldName
+        return
+      }
+
+      // 2️⃣ 没改，不请求后端
+      if (newName === oldName) {
+        return
+      }
+
+      try {
+        // 3️⃣ 调后端保存
+        await api.put('/AI/chat/session/title', {
+          sessionId: session.id,
+          title: newName
+        })
+        // 4️⃣ 成功：什么都不做（本地已经是新值）
+      } catch (err) {
+        console.error('Update session title failed:', err)
+
+        // 5️⃣ 失败回滚
+        session.name = oldName
+      }
+    }
+
     onMounted(() => {
       loadSessions()
     })
@@ -475,8 +536,11 @@ export default {
       createNewSession,
       switchSession,
       syncHistory,
-      sendMessage
+      sendMessage,
+      startEditSession,
+      finishEditSession
     }
+  
   }
 }
 </script>
@@ -857,4 +921,19 @@ export default {
   box-shadow: none;
   cursor: not-allowed;
 }
+
+.session-title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-title-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  font-size: 14px;
+}
+
 </style>

@@ -15,6 +15,15 @@ import (
 
 var ctx = context.Background()
 
+// 获取指定会话ID的会话Title
+func GetTitleSession(id string) string {
+	s, err := session.GetSessionByID(id)
+	if err != nil {
+		return ""
+	}
+	return s.Title
+}
+
 func GetUserSessionsByUserName(userName string) ([]model.SessionInfo, error) {
 	//获取用户的所有会话ID
 
@@ -26,7 +35,7 @@ func GetUserSessionsByUserName(userName string) ([]model.SessionInfo, error) {
 	for _, session := range Sessions {
 		SessionInfos = append(SessionInfos, model.SessionInfo{
 			SessionID: session,
-			Title:     session, // 暂时用sessionID作为标题，后续重构需要的时候可以更改
+			Title:     GetTitleSession(session), // 已更改为标题
 		})
 	}
 
@@ -194,4 +203,11 @@ func GetChatHistory(userName string, sessionID string) ([]model.History, code.Co
 func ChatStreamSend(userName string, sessionID string, userQuestion string, modelType string, writer http.ResponseWriter) code.Code {
 
 	return StreamMessageToExistingSession(userName, sessionID, userQuestion, modelType, writer)
+}
+
+func UpdateSessionTitle(id, title string) code.Code {
+	if err := session.UpdateSessionTitle(id, title); err != nil {
+		return code.CodeServerBusy
+	}
+	return code.CodeSuccess
 }

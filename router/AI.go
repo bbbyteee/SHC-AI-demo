@@ -16,6 +16,7 @@ func AIRouter(r *gin.RouterGroup) {
 		r.POST("/chat/send-stream-new-session", session.CreateStreamSessionAndSendMessage)
 		r.POST("/chat/send", session.ChatSend)
 		r.POST("/chat/send-stream", session.ChatStreamSend)
+		r.PUT("/chat/session/title", session.UpdateSessionTitle)
 		// r.POST("/chat/tts", AI.ChatSpeech)                  // ChatSpeechHandler
 	}
 }

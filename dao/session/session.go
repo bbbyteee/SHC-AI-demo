@@ -1,8 +1,10 @@
 package session
 
 import (
+	"errors"
 	"shc-ai-demo/common/mysql"
 	"shc-ai-demo/model"
+	"strings"
 )
 
 func GetSessionsByUserName(UserName int64) ([]model.Session, error) {
@@ -20,4 +22,18 @@ func GetSessionByID(sessionID string) (*model.Session, error) {
 	var session model.Session
 	err := mysql.DB.Where("id = ?", sessionID).First(&session).Error
 	return &session, err
+}
+
+func UpdateSessionTitle(id, title string) error {
+	title = strings.TrimSpace(title)
+	if title == "" {
+		return errors.New("title cannot be empty")
+	}
+
+	// 只更新 title
+	err := mysql.DB.Model(&model.Session{}).
+		Where("id = ?", id).
+		Update("title", title).Error
+
+	return err
 }
