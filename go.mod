@@ -2,7 +2,11 @@ module shc-ai-demo
 
 go 1.24.0
 
-require gorm.io/gorm v1.31.1
+require (
+	github.com/yalue/onnxruntime_go v1.25.0
+	golang.org/x/image v0.22.0
+	gorm.io/gorm v1.31.1
+)
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
